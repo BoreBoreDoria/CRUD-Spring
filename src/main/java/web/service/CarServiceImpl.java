@@ -1,40 +1,32 @@
 package web.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import web.DAO.CarDAO;
-import web.DAO.CarDaoImpl;
 import web.model.Car;
+import web.repository.CarRepository;
 
 import java.util.List;
 
 @Service
-public class CarServiceImpl implements  CarService{
-    private CarDAO carDao = new CarDaoImpl();
+@Transactional
+public class CarServiceImpl implements CarService{
+    @Autowired
+    CarRepository repo;
 
-    @Override
-    @Transactional
-    public List<Car> allCar() {
-        return carDao.allCar();
+    public void save(Car customer) {
+        repo.save(customer);
     }
 
-    @Override
-    public void add(Car car) {
-        carDao.add(car);
+    public List<Car> listAll() {
+        return (List<Car>) repo.findAll();
     }
 
-    @Override
-    public void delete(Car car) {
-        carDao.delete(car);
+    public Car get(int id) {
+        return repo.findById(id).get();
     }
 
-    @Override
-    public void edit(Car car) {
-        carDao.edit(car);
-    }
-
-    @Override
-    public Car getCarById(int id) {
-        return carDao.getCarById(id);
+    public void delete(int id) {
+        repo.deleteById(id);
     }
 }
